@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
+from django.contrib.auth.models import User
 
 class LoginView(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
@@ -16,3 +17,9 @@ class LoginView(ObtainAuthToken):
             'email': user.email
         })
         
+class RegisterView():
+    def post(self, request, *args, **kwargs):
+        user = User.objects.create_user(username = request.POST.get('username'), 
+                                        email= request.POST.get('email'),
+                                        password=request.POST.get('password'))
+        user.save()
