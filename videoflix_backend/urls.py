@@ -21,5 +21,5 @@ from videoflix.views import LoginView, RegisterView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', LoginView.as_view()),
-    path('register/', RegisterView),
+    path('register/', RegisterView.as_view()),
 ]
