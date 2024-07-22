@@ -77,4 +77,47 @@ def activate(request, uidb64, token):
         else:
             messages.error(request, "Activation link is invalid!")
             return render(request, 'activation_failed.html')
+
+class ResetPwView(APIView):
+    def post(self, request, *args, **kwargs):
+        email = request.data.get("email")
+        if User.objects.filter(email=email).exists():
+            myuser = User.objects.get(email=email)
+            
+            current_site = get_current_site(request)
+            email_subject = "Reset Your Password"
+            from_email = settings.EMAIL_HOST_USER
+            to_list = [myuser.email]
+            message2 = render_to_string('email_reset_password.html', {
+            'domain': current_site.domain,
+            'uid': urlsafe_base64_encode(force_bytes(myuser.pk)),
+            'token': generate_token.make_token(myuser)
+            })
+      
+            send_mail(email_subject, message2, from_email, to_list, fail_silently=False)
+            messages.success(request, "Your password has been succesfully resetted.")
+            
+            
+def activatepw(request, uidb64, token):
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            myuser = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            myuser = None
+            
+        if myuser is not None and generate_token.check_token(myuser, token):
+            context = {'email': myuser.email}
+            return render(request, 'reset_password.html', context)
+        else:
+            messages.error(request, "Activation link is invalid!")
+            return render(request, 'activation_failed.html')
         
+        
+class SetNewPw(APIView):
+    def post(self, request, *args, **kwargs):
+        email = request.data.get("email")
+        newPw = request.data.get("pw")
+        myuser = User.objects.get(email=email)
+        myuser.set_password(newPw)
+        myuser.save()
+           

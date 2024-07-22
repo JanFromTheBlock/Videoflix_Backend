@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from videoflix.views import LoginView, RegisterView, activate
+from videoflix.views import LoginView, RegisterView, ResetPwView, SetNewPw, activate, activatepw
 
 
 urlpatterns = [
@@ -24,4 +24,7 @@ urlpatterns = [
     path('login/', LoginView.as_view()),
     path('register/', RegisterView.as_view()),
     path('activate/<uidb64>/<token>', activate, name='activate'),
+    path('activatepw/<uidb64>/<token>', activatepw, name='activatepw'),
+    path('reset_pw/', ResetPwView.as_view()),
+    path('set_new_pw/', SetNewPw.as_view()),
 ]
