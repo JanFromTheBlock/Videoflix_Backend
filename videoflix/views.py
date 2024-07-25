@@ -96,7 +96,9 @@ def activate(request, uidb64, token):
 class ResetPwView(APIView):
     def post(self, request, *args, **kwargs):
         email = request.data.get("email")
-        if User.objects.filter(email=email).exists():
+        if not User.objects.filter(email=email).exists():
+            return Response({"error": "Email address not found."}, status=status.HTTP_404_NOT_FOUND)
+        try:
             myuser = User.objects.get(email=email)
             
             current_site = get_current_site(request)
@@ -110,7 +112,10 @@ class ResetPwView(APIView):
             })
       
             send_mail(email_subject, message2, from_email, to_list, fail_silently=False)
-            messages.success(request, "Your password has been succesfully resetted.")
+            return Response({"success": "Password reset email sent."}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
             
             
 def activatepw(request, uidb64, token):
