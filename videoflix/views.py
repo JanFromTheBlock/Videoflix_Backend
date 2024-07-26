@@ -43,7 +43,7 @@ class RegisterView(APIView):
                 errors['username'] = "Username ist bereits vergeben"
             if email_exists:
                 errors['email'] = "E-Mail ist bereits vergeben" 
-            return Response({'errors': errors})  
+            return Response({'errors': errors}, status=status.HTTP_400_BAD_REQUEST)  
         else:
             myuser = User.objects.create_user(
                                         username = username, 
@@ -74,7 +74,8 @@ class RegisterView(APIView):
                 {
                 'user_id': myuser.pk,
                 'email': myuser.email
-                }
+                },
+                status=status.HTTP_201_CREATED
             )
         
 def activate(request, uidb64, token):
