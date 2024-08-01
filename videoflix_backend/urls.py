@@ -19,6 +19,7 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from videoflix.views import LoginView, RegisterView, ResetPwView, SetNewPw, activate, activatepw
+from videos.views import VideoView
 
 
 urlpatterns = [
@@ -29,4 +30,5 @@ urlpatterns = [
     path('activatepw/<uidb64>/<token>', activatepw, name='activatepw'),
     path('reset_pw/', ResetPwView.as_view()),
     path('set_new_pw/', SetNewPw.as_view()),
+    path('videos', VideoView.as_view()),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
