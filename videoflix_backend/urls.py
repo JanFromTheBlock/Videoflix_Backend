@@ -30,5 +30,5 @@ urlpatterns = [
     path('activatepw/<uidb64>/<token>', activatepw, name='activatepw'),
     path('reset_pw/', ResetPwView.as_view()),
     path('set_new_pw/', SetNewPw.as_view()),
-    path('videos', VideoView.as_view()),
+    path('videos/', VideoView.as_view()),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
