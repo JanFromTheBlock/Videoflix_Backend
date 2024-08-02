@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'videoflix',
-    'videos',
+    'videos.apps.VideosConfig',
     'corsheaders'
 ]
 
