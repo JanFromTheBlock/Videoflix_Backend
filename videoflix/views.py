@@ -89,7 +89,7 @@ def activate(request, uidb64, token):
             myuser.is_active = True
             myuser.save()
             messages.success(request, "Your account has been activated")
-            return HttpResponseRedirect('http://localhost:4200/login')
+            return HttpResponseRedirect('http://localhost:4200/register-succes')
         else:
             messages.error(request, "Activation link is invalid!")
             return render(request, 'activation_failed.html')

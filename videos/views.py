@@ -16,6 +16,8 @@ class VideoView(APIView):
         return Response(serializer.data)
     
 class SingleVideoView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     
     def get(self, request, format=None):
         videoId = request.query_params.get("video_id")  # Hier ändern
