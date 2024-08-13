@@ -15,11 +15,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from videoflix.views import LoginView, RegisterView, ResetPwView, SetNewPw, activate, activatepw
 from videos.views import VideoView, SingleVideoView
+from debug_toolbar.toolbar import debug_toolbar_urls
 
 
 urlpatterns = [
@@ -32,4 +33,4 @@ urlpatterns = [
     path('set_new_pw/', SetNewPw.as_view()),
     path('videos/', VideoView.as_view()),
     path('single_video/', SingleVideoView.as_view()),
-] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT) + debug_toolbar_urls()

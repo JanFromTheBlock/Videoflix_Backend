@@ -54,10 +54,12 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'videoflix',
     'videos.apps.VideosConfig',
-    'corsheaders'
+    'corsheaders',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -160,3 +162,21 @@ EMAIL_HOST_USER = os.getenv('secretMail')
 EMAIL_HOST_PASSWORD = os.getenv('secretKey')
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = os.getenv('secretMail')
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        },
+        "KEY_PREFIX": "videoflix"
+    }
+}
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+    'localhost',
+]
+
+CACHE_TTL = 60 * 15
