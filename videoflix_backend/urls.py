@@ -33,4 +33,5 @@ urlpatterns = [
     path('set_new_pw/', SetNewPw.as_view()),
     path('videos/', VideoView.as_view()),
     path('single_video/', SingleVideoView.as_view()),
+    path('django-rq/', include('django_rq.urls'))
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT) + debug_toolbar_urls()
