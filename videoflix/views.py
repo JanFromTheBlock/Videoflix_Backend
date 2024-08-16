@@ -13,16 +13,13 @@ from django.contrib import messages
 from videoflix_backend import settings
 from django.http import HttpResponseRedirect
 from .tokens import generate_token
-from django.views.decorators.cache import cache_page
-from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.shortcuts import redirect
 
-CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+
 
 
 
 class LoginView(ObtainAuthToken):
-    @cache_page(CACHE_TTL)
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data,
                                            context={'request': request})
