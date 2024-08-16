@@ -15,6 +15,7 @@ from django.http import HttpResponseRedirect
 from .tokens import generate_token
 from django.views.decorators.cache import cache_page
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.shortcuts import redirect
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
@@ -132,8 +133,8 @@ def activatepw(request, uidb64, token):
             myuser = None
             
         if myuser is not None and generate_token.check_token(myuser, token):
-            context = {'email': myuser.email}
-            return render(request, 'reset_password.html', context)
+            mail =  myuser.email
+            return redirect(f'http://localhost:4200/reset-password/{uidb64}/{mail}')
         else:
             messages.error(request, "Activation link is invalid!")
             return render(request, 'activation_failed.html')
@@ -143,7 +144,15 @@ class SetNewPw(APIView):
     def post(self, request, *args, **kwargs):
         email = request.data.get("email")
         newPw = request.data.get("pw")
-        myuser = User.objects.get(email=email)
-        myuser.set_password(newPw)
-        myuser.save()
+        
+        try:
+            myuser = User.objects.get(email=email)
+            myuser.set_password(newPw)
+            myuser.save()
+            return Response({"message": "Password updated successfully"}, status=200)
+        except User.DoesNotExist:
+            return Response({"error": "User not found"}, status=404)
+        except Exception as e:
+            return Response({"error": str(e)}, status=500)
+        
            
