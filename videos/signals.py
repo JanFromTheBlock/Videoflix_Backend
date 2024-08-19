@@ -10,7 +10,7 @@ import django_rq
 def video_post_save(sender, instance, created, **kwargs):
     if created:
         queue = django_rq.get_queue('default', autocommit=True)
-        queue.enqueue(convert, instance.video_file.path)
+        queue.enqueue(convert, instance.video_file.path, job_timeout=1000)
     
 @receiver(post_delete, sender=Video)
 def video_post_delete(sender, instance, **kwargs):
