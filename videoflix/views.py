@@ -21,6 +21,7 @@ from django.shortcuts import redirect
 
 class LoginView(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
+        request.data['username'] = request.data.get('username').lower()
         serializer = self.serializer_class(data=request.data,
                                            context={'request': request})
         serializer.is_valid(raise_exception=True)
@@ -34,7 +35,7 @@ class LoginView(ObtainAuthToken):
         
 class RegisterView(APIView):
     def post(self, request, *args, **kwargs):
-        username = request.data.get("username")
+        username = request.data.get("username").lower()
         email= request.data.get("email")
         
         user_exists = User.objects.filter(username=username).exists()
