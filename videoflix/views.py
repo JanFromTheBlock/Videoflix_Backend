@@ -21,7 +21,17 @@ from django.shortcuts import redirect
 
 class LoginView(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
-        request.data['username'] = request.data.get('username').lower()
+        username = request.data.get('username', '').lower()
+        password = request.data.get('password', '')
+        
+        try:
+            user = User.objects.get(username=username)
+            
+            if not user.is_active:
+               return Response({'detail': 'Account is not activated. Please check your email.'}, status=status.HTTP_403_FORBIDDEN) 
+        except User.DoesNotExist:
+            return Response({'detail': 'Invalid username or password.'}, status=status.HTTP_400_BAD_REQUEST)
+        
         serializer = self.serializer_class(data=request.data,
                                            context={'request': request})
         serializer.is_valid(raise_exception=True)
