@@ -25,13 +25,13 @@ from debug_toolbar.toolbar import debug_toolbar_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', LoginView.as_view()),
-    path('register/', RegisterView.as_view()),
+    path('login/', LoginView.as_view(), name='login'),
+    path('register/', RegisterView.as_view(), name='register'),
     path('activate/<uidb64>/<token>', activate, name='activate'),
     path('activatepw/<uidb64>/<token>', activatepw, name='activatepw'),
-    path('reset_pw/', ResetPwView.as_view()),
-    path('set_new_pw/', SetNewPw.as_view()),
-    path('videos/', VideoView.as_view()),
-    path('single_video/', SingleVideoView.as_view()),
+    path('reset_pw/', ResetPwView.as_view(), name='reset-password'),
+    path('set_new_pw/', SetNewPw.as_view(), name='set-new-password'),
+    path('videos/', VideoView.as_view(), name='all-videos'),
+    path('single_video/', SingleVideoView.as_view(), name='single-video'),
     path('django-rq/', include('django_rq.urls'))
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT) + debug_toolbar_urls()

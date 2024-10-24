@@ -29,7 +29,7 @@ class SingleVideoView(APIView):
     
     @method_decorator(cache_page(CACHE_TTL))
     def get(self, request, format=None):
-        videoId = request.query_params.get("video_id")  # Hier ändern
+        videoId = request.query_params.get("video_id")
         id_exists = Video.objects.filter(pk=videoId).exists()
         if id_exists:
             singleVideo = Video.objects.get(pk=videoId)
