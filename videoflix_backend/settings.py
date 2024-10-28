@@ -104,8 +104,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'videoflix',
-        'USER': 'janski',
-        'PASSWORD': 'Vid€0fliX',
+        'USER': os.getenv('userSQL'),
+        'PASSWORD': os.getenv('passwordSQL'),
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -161,7 +161,7 @@ REST_FRAMEWORK = {
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.web.de'
+EMAIL_HOST = os.getenv('secretHost')
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.getenv('secretMail')
 EMAIL_HOST_PASSWORD = os.getenv('secretKey')
@@ -193,7 +193,7 @@ RQ_QUEUES = {
         'PORT': 6379,
         'DB': 0,
         'DEFAULT_TIMEOUT': 1000,
-        "PASSWORD": "foobared",
+        "PASSWORD": os.getenv('passwordRQ'),
     },
     
 }
