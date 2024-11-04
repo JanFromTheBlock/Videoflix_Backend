@@ -106,8 +106,8 @@ DATABASES = {
         'NAME': 'videoflix',
         'USER': os.getenv('userSQL'),
         'PASSWORD': os.getenv('passwordSQL'),
-        'HOST': 'localhost',
-        'PORT': '',
+        'HOST': '172.19.145.144',
+        'PORT': '5432',
     }
 }
 
