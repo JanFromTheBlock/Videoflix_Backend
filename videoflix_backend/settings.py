@@ -104,8 +104,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'videoflix',
-        'USER': os.getenv('userSQL'),
-        'PASSWORD': os.getenv('passwordSQL'),
+        'USER': 'janski',
+        'PASSWORD': 'Vid€0fliX',
         'HOST': 'localhost',
         'PORT': '5432',
     }
