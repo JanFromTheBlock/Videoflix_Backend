@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 from videoflix.views import LoginView, RegisterView, ResetPwView, SetNewPw, activate, activatepw
 from videos.views import VideoView, SingleVideoView
 from debug_toolbar.toolbar import debug_toolbar_urls
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 
 urlpatterns = [
@@ -34,4 +35,4 @@ urlpatterns = [
     path('videos/', VideoView.as_view(), name='all-videos'),
     path('single_video/', SingleVideoView.as_view(), name='single-video'),
     path('django-rq/', include('django_rq.urls'))
-] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT) + debug_toolbar_urls()
+] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT) + debug_toolbar_urls()+ staticfiles_urlpatterns()
