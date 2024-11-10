@@ -32,7 +32,8 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '35.198.170.135',
-    'backend-videoflix.janborcholt.de'
+    'backend-videoflix.janborcholt.de',
+    '35.242.237.1',
 ]
 
 CORS_ALLOWED_ORIGINS = ['http://localhost:4200',
