@@ -39,6 +39,7 @@ ALLOWED_HOSTS = [
 CORS_ALLOWED_ORIGINS = ['http://localhost:4200',
                         "http://localhost:8000",
                         "http://127.0.0.1:8000",
+                        "https://www.videoflix.janborcholt.de",
                         ]
 
 
@@ -165,12 +166,12 @@ REST_FRAMEWORK = {
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = os.getenv('secretHost')
+EMAIL_HOST = '"smtp.web.de"'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = os.getenv('secretMail')
-EMAIL_HOST_PASSWORD = os.getenv('secretKey')
+EMAIL_HOST_USER = 'videoflix@web.de'
+EMAIL_HOST_PASSWORD = 'Vid30flix'
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = os.getenv('secretMail')
+DEFAULT_FROM_EMAIL = 'videoflix@web.de'
 
 CACHES = {
     "default": {
