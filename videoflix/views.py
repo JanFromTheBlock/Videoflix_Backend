@@ -103,7 +103,7 @@ def activate(request, uidb64, token):
             myuser.is_active = True
             myuser.save()
             messages.success(request, "Your account has been activated")
-            return HttpResponseRedirect('http://localhost:4200/register-succes')
+            return HttpResponseRedirect('backend-videoflix.janborcholt.de/register-succes')
         else:
             messages.error(request, "Activation link is invalid!")
             return render(request, 'activation_failed.html')
@@ -142,7 +142,7 @@ def activatepw(request, uidb64, token):
             
         if myuser is not None and generate_token.check_token(myuser, token):
             mail =  myuser.email
-            return redirect(f'http://localhost:4200/reset-password/{uidb64}/{mail}')
+            return redirect(f'backend-videoflix.janborcholt.de/reset-password/{uidb64}/{mail}')
         else:
             messages.error(request, "Activation link is invalid!")
             return render(request, 'activation_failed.html')
