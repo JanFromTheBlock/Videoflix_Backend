@@ -44,53 +44,67 @@ class LoginView(ObtainAuthToken):
         })
         
 class RegisterView(APIView):
+    
     def post(self, request, *args, **kwargs):
         username = request.data.get("username").lower()
-        email= request.data.get("email")
+        email = request.data.get("email")
+        password = request.data.get("password")
         
-        user_exists = User.objects.filter(username=username).exists()
-        email_exists = User.objects.filter(email=email).exists()
+        errors = self._validate_user(username, email)
+        if errors:
+            return Response({'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
         
-        if user_exists or email_exists:
-            errors = {}
-            if user_exists:
-                errors['username'] = "Username ist bereits vergeben"
-            if email_exists:
-                errors['email'] = "E-Mail ist bereits vergeben" 
-            return Response({'errors': errors}, status=status.HTTP_400_BAD_REQUEST)  
-        else:
-            myuser = User.objects.create_user(
-                                        username = username, 
-                                        email= email,
-                                        password=request.data.get("password"))
-            myuser.is_active = False
-            myuser.save()
+        user = self._create_user(username, email, password)
+        self._send_confirmation_email(request, user)
         
-            subject = "Welcome to Our Django User Registration System"
-            message = f"Hello !\n\nThank you for registering on our website. Please confirm your email address to activate your account.\n\nRegards,\nThe Django Team"
-            from_email = settings.EMAIL_HOST_USER
-            to_list = [myuser.email]
-            send_mail(subject, message, from_email, to_list, fail_silently=False)
+        messages.success(request, "Your account has been created successfully! Please check your email to confirm your email address and activate your account.")
         
-            current_site = get_current_site(request)
-            email_subject = "Confirm Your Email Address"
-            message2 = render_to_string('email_confirmation.html', {
+        return Response(
+            {
+                'user_id': user.pk,
+                'email': user.email
+            },
+            status=status.HTTP_201_CREATED
+        )
+    
+    def _validate_user(self, username, email):
+        """Überprüft, ob der Benutzername oder die E-Mail bereits existiert."""
+        errors = {}
+        if User.objects.filter(username=username).exists():
+            errors['username'] = "Username ist bereits vergeben"
+        if User.objects.filter(email=email).exists():
+            errors['email'] = "E-Mail ist bereits vergeben"
+        return errors
+    
+    def _create_user(self, username, email, password):
+        """Erstellt einen neuen Benutzer mit den angegebenen Daten und setzt is_active auf False."""
+        user = User.objects.create_user(username=username, email=email, password=password)
+        user.is_active = False
+        user.save()
+        return user
+    
+    def _send_confirmation_email(self, request, user):
+        """Sendet eine Bestätigungs-E-Mail und eine Willkommensnachricht an den neuen Benutzer."""
+        # Willkommensnachricht
+        subject = "Welcome to Our Django User Registration System"
+        message = (
+            "Hello!\n\nThank you for registering on our website. "
+            "Please confirm your email address to activate your account.\n\n"
+            "Regards,\nThe Django Team"
+        )
+        from_email = settings.EMAIL_HOST_USER
+        to_list = [user.email]
+        send_mail(subject, message, from_email, to_list, fail_silently=False)
+        
+        # Bestätigungs-E-Mail
+        current_site = get_current_site(request)
+        email_subject = "Confirm Your Email Address"
+        message2 = render_to_string('email_confirmation.html', {
             'domain': current_site.domain,
-            'uid': urlsafe_base64_encode(force_bytes(myuser.pk)),
-            'token': generate_token.make_token(myuser)
-            })
-      
-            send_mail(email_subject, message2, from_email, to_list, fail_silently=False)
-            messages.success(request, "Your account has been created successfully! Please check your email to confirm your email address and activate your account.")
-        
-        
-            return Response(
-                {
-                'user_id': myuser.pk,
-                'email': myuser.email
-                },
-                status=status.HTTP_201_CREATED
-            )
+            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+            'token': generate_token.make_token(user)
+        })
+        send_mail(email_subject, message2, from_email, to_list, fail_silently=False)
         
 def activate(request, uidb64, token):
         try:
