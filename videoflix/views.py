@@ -68,7 +68,6 @@ class RegisterView(APIView):
         )
     
     def _validate_user(self, username, email):
-        """Überprüft, ob der Benutzername oder die E-Mail bereits existiert."""
         errors = {}
         if User.objects.filter(username=username).exists():
             errors['username'] = "Username ist bereits vergeben"
@@ -77,26 +76,14 @@ class RegisterView(APIView):
         return errors
     
     def _create_user(self, username, email, password):
-        """Erstellt einen neuen Benutzer mit den angegebenen Daten und setzt is_active auf False."""
         user = User.objects.create_user(username=username, email=email, password=password)
         user.is_active = False
         user.save()
         return user
     
     def _send_confirmation_email(self, request, user):
-        """Sendet eine Bestätigungs-E-Mail und eine Willkommensnachricht an den neuen Benutzer."""
-        # Willkommensnachricht
-        subject = "Welcome to Our Django User Registration System"
-        message = (
-            "Hello!\n\nThank you for registering on our website. "
-            "Please confirm your email address to activate your account.\n\n"
-            "Regards,\nThe Django Team"
-        )
         from_email = settings.EMAIL_HOST_USER
         to_list = [user.email]
-        send_mail(subject, message, from_email, to_list, fail_silently=False)
-        
-        # Bestätigungs-E-Mail
         current_site = get_current_site(request)
         email_subject = "Confirm Your Email Address"
         message2 = render_to_string('email_confirmation.html', {

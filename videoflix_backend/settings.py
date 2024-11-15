@@ -166,12 +166,13 @@ REST_FRAMEWORK = {
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = '"smtp.web.de"'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'videoflix@web.de'
-EMAIL_HOST_PASSWORD = 'Vid30flix'
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'videoflix@web.de'
+EMAIL_HOST = 'w01eb090.kasserver.com'
+EMAIL_PORT = 587  # Standard für TLS
+EMAIL_HOST_USER = 'videoflix@janborcholt.de'  # Deine E-Mail-Adresse
+EMAIL_HOST_PASSWORD = 'ZdagNGsXCqHKdq5hS7UW'  # Dein Passwort
+EMAIL_USE_TLS = True  # Aktiviert TLS-Verschlüsselung
+EMAIL_USE_SSL = False  # SSL wird bei Port 587 nicht verwendet
+DEFAULT_FROM_EMAIL = 'videoflix@janborcholt.de'
 
 CACHES = {
     "default": {
